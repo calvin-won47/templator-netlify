@@ -1,8 +1,10 @@
 
 import React from 'react';
 import { Github, Twitter, Youtube } from 'lucide-react';
+import { useConfig } from '../contexts/ConfigContext';
 
 const Footer: React.FC = () => {
+  const { siteIdentity, footer } = useConfig();
   const footerLinks = {
     'Products': ['Platform', 'CLI', 'Edge Functions', 'Integrations'],
     'Company': ['About', 'Blog', 'Careers', 'Press'],
@@ -15,8 +17,8 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
           <div className="col-span-2">
-            <h3 className="font-bold text-lg">Netlify</h3>
-            <p className="mt-2 text-gray-400 text-sm">The platform for modern web development.</p>
+            <h3 className="font-bold text-lg">{siteIdentity?.name || 'Netlify'}</h3>
+            <p className="mt-2 text-gray-400 text-sm">{footer?.tagline || 'The platform for modern web development.'}</p>
           </div>
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
@@ -33,11 +35,11 @@ const Footer: React.FC = () => {
         </div>
         <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center">
           <div className="flex space-x-4">
-            <a href="#" className="text-gray-500 hover:text-white"><Github size={20} /></a>
-            <a href="#" className="text-gray-500 hover:text-white"><Twitter size={20} /></a>
-            <a href="#" className="text-gray-500 hover:text-white"><Youtube size={20} /></a>
+            <a href={footer?.links?.github || '#'} className="text-gray-500 hover:text-white" aria-label="GitHub"><Github size={20} /></a>
+            <a href={footer?.links?.twitter || '#'} className="text-gray-500 hover:text-white" aria-label="Twitter"><Twitter size={20} /></a>
+            <a href={footer?.links?.youtube || '#'} className="text-gray-500 hover:text-white" aria-label="YouTube"><Youtube size={20} /></a>
           </div>
-          <p className="text-gray-500 text-sm mt-4 sm:mt-0">&copy; {new Date().getFullYear()} Netlify. All rights reserved.</p>
+          <p className="text-gray-500 text-sm mt-4 sm:mt-0">&copy; {new Date().getFullYear()} {siteIdentity?.name || 'Netlify'}. {footer?.copyright || 'All rights reserved.'}</p>
         </div>
       </div>
     </footer>

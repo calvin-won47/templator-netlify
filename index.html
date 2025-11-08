@@ -5,13 +5,42 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Netlify Clone</title>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-58TDPTJ3');</script>
+    <title>正在加载...</title>
+    <!-- App Config: blocking load before React -->
+    <script>
+      // 1. Default values in case fetch fails
+      window.APP_CONFIG = {
+        siteIdentity: { name: '加载失败' },
+        apiEndpoints: { cmsBaseUrl: '', cmsSiteId: 'error' }
+      };
+      try {
+        // 2. Synchronous XHR to block rendering until config is loaded
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/config.json', false); // 'false' = synchronous
+        xhr.send(null);
+        if (xhr.status === 200) {
+          // 3. Parse and assign to window
+          window.APP_CONFIG = JSON.parse(xhr.responseText);
+        } else {
+          console.warn('无法加载外部 config.json，将使用默认配置。');
+        }
+      } catch (error) {
+        console.error('加载 config.json 时出错:', error);
+      }
+    </script>
+    <!-- Google Tag Manager (uses config.gtmId when available) -->
+    <script>
+      (function() {
+        var gtmId = (window.APP_CONFIG && window.APP_CONFIG.gtmId) || 'GTM-58TDPTJ3';
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = document.getElementsByTagName('script')[0];
+        var j = document.createElement('script');
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + gtmId;
+        f.parentNode.insertBefore(j, f);
+      })();
+    </script>
     <!-- End Google Tag Manager -->
   </head>
   <body>

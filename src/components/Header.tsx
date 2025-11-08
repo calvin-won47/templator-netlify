@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Menu, X, ChevronDown, Search } from 'lucide-react';
+import { useConfig } from '../contexts/ConfigContext';
 
 const NetlifyLogo = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -12,6 +13,9 @@ const NetlifyLogo = () => (
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const config = useConfig();
+  const siteName = config.siteIdentity?.name || 'Netlify';
+  const logoUrl = config.siteIdentity?.logoUrl;
 
   const navLinks = [
     { name: 'Platform', dropdown: true },
@@ -29,8 +33,12 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
             <a href="/" className="flex items-center space-x-2">
-              <NetlifyLogo />
-              <span className="font-bold text-lg">Netlify</span>
+              {logoUrl ? (
+                <img src={logoUrl} alt={siteName} className="w-6 h-6" />
+              ) : (
+                <NetlifyLogo />
+              )}
+              <span className="font-bold text-lg">{siteName}</span>
             </a>
             <nav className="hidden lg:flex items-center space-x-6">
               {navLinks.map((link) => (

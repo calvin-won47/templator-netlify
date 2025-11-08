@@ -1,0 +1,41 @@
+{
+  "siteIdentity": {
+    "name": "默认站点名称",
+    "logoUrl": "/default-logo.png"
+  },
+  "theming": {
+    "primaryColor": "#333333"
+  },
+  "slogan": "默认站点标语",
+  "hero": {
+    "description": "这是默认的 Hero 描述。"
+  },
+  "seo": {
+    "title": "默认站点名称",
+    "description": "默认站点的 SEO 描述"
+  },
+  "seoKeywords": "关键字1,关键字2",
+  "gtmId": "GTM-58TDPTJ3",
+  "cta": {
+    "title": "免费开始",
+    "description": "使用我们的平台构建并部署你的下一个项目。",
+    "primaryLabel": "马上开始",
+    "primaryHref": "#",
+    "secondaryLabel": "申请演示",
+    "secondaryHref": "#",
+    "emailPlaceholder": "name@example.com"
+  },
+  "footer": {
+    "tagline": "现代 Web 开发的平台。",
+    "copyright": "All rights reserved.",
+    "links": {
+      "github": "#",
+      "twitter": "#",
+      "youtube": "#"
+    }
+  },
+  "apiEndpoints": {
+    "cmsBaseUrl": "https://2amcreations.com",
+    "cmsSiteId": "xmyxyswkj"
+  }
+}

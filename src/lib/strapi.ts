@@ -1,8 +1,15 @@
-export const API_URL = 'https://2amcreations.com'
-export const SITE_SLUG = 'xmyxyswkj'
+function getApiUrl(): string {
+  const cfgUrl = window.APP_CONFIG?.apiEndpoints?.cmsBaseUrl
+  return (cfgUrl && cfgUrl.trim()) || 'https://2amcreations.com'
+}
+
+function getSiteSlug(): string {
+  const cfgSlug = window.APP_CONFIG?.apiEndpoints?.cmsSiteId
+  return (cfgSlug && cfgSlug.trim()) || 'xmyxyswkj'
+}
 
 export function buildUrl(path: string): string {
-  return `${API_URL}${path}`
+  return `${getApiUrl()}${path}`
 }
 
 function normalizeImage(media: any): string | null {
@@ -29,7 +36,7 @@ export type BlogPostListItem = {
 }
 
 export async function fetchBlogPosts(): Promise<BlogPostListItem[]> {
-  const query = `/api/blog-posts?populate=coverImage&filters[site][slug][$eq]=${SITE_SLUG}&sort=createdAt:desc`
+  const query = `/api/blog-posts?populate=coverImage&filters[site][slug][$eq]=${getSiteSlug()}&sort=createdAt:desc`
   const res = await fetch(buildUrl(query))
   if (!res.ok) throw new Error('Failed to fetch blog posts')
   const json = await res.json()
@@ -54,7 +61,7 @@ export type BlogDetail = {
 }
 
 export async function fetchBlogBySlug(slug: string): Promise<BlogDetail | null> {
-  const query = `/api/blog-posts?populate=*&filters[slug][$eq]=${slug}&filters[site][slug][$eq]=${SITE_SLUG}`
+  const query = `/api/blog-posts?populate=*&filters[slug][$eq]=${slug}&filters[site][slug][$eq]=${getSiteSlug()}`
   const res = await fetch(buildUrl(query))
   if (!res.ok) throw new Error('Failed to fetch blog detail')
   const json = await res.json()
