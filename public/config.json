@@ -16,6 +16,18 @@
   },
   "seoKeywords": "关键字1,关键字2",
   "gtmId": "GTM-58TDPTJ3",
+  "features": {
+    "title": "Why Netlify",
+    "subtitle": "Netlify is the platform for modern web development that empowers teams to build better products faster.",
+    "items": [
+      { "icon": "layers", "title": "Composable Web Architecture", "description": "Build performant, secure, and scalable websites and apps with a composable architecture." },
+      { "icon": "zap", "title": "High-Performance Edge", "description": "A programmable, high-performance edge network that is faster than other cloud providers." },
+      { "icon": "shield", "title": "Serverless Functions", "description": "Run on-demand serverless functions that automatically scale to meet your needs." },
+      { "icon": "code", "title": "Developer Workflow", "description": "A Git-based workflow for faster development, easier collaboration, and shorter time to market." },
+      { "icon": "globe", "title": "Enterprise-Grade Platform", "description": "A robust platform with the security, compliance, and performance that enterprises demand." },
+      { "icon": "puzzle", "title": "Integrations", "description": "Integrate your favorite tools and services to create a powerful, unified workflow." }
+    ]
+  },
   "cta": {
     "title": "免费开始",
     "description": "使用我们的平台构建并部署你的下一个项目。",

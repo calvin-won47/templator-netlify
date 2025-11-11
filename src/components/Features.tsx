@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { Layers, Zap, Shield, Code, Globe, Puzzle } from 'lucide-react';
+import { useConfig } from '../contexts/ConfigContext';
 
-const featureItems = [
+const defaultFeatureItems = [
   {
     icon: Layers,
     title: 'Composable Web Architecture',
@@ -35,22 +36,48 @@ const featureItems = [
   },
 ];
 
+const iconMap: Record<string, React.ComponentType<any>> = {
+  layers: Layers,
+  zap: Zap,
+  shield: Shield,
+  code: Code,
+  globe: Globe,
+  puzzle: Puzzle,
+};
+
 const Features: React.FC = () => {
+  const { features } = useConfig();
+
+  const title = features?.title || 'Why Netlify';
+  const subtitle =
+    features?.subtitle ||
+    'Netlify is the platform for modern web development that empowers teams to build better products faster.';
+
+  // Build items from config if available
+  const items = (features?.items || []).map((item) => {
+    const IconComp = (item.icon && iconMap[item.icon.toLowerCase()]) || Layers;
+    return {
+      icon: IconComp,
+      title: item.title || '',
+      description: item.description || '',
+    };
+  });
+
+  const renderItems = items.length > 0 ? items : defaultFeatureItems;
+
   return (
     <section className="py-20 md:py-32 bg-[#0a0a0c]">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">Why Netlify</h2>
-          <p className="mt-4 text-lg text-gray-400">
-            Netlify is the platform for modern web development that empowers teams to build better products faster.
-          </p>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">{title}</h2>
+          <p className="mt-4 text-lg text-gray-400">{subtitle}</p>
         </div>
 
         <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featureItems.map((item, index) => (
+          {renderItems.map((item, index) => (
             <div key={index} className="p-8 bg-gray-900/50 rounded-lg border border-gray-800">
-              <div className="flex items-center justify-center h-12 w-12 bg-[#31E0C8]/10 rounded-lg">
-                <item.icon className="h-6 w-6 text-[#31E0C8]" />
+              <div className="flex items-center justify-center h-12 w-12 rounded-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--accent-color, #31E0C8) 15%, transparent)' }}>
+                <item.icon className="h-6 w-6" style={{ color: 'var(--accent-color, #31E0C8)' }} />
               </div>
               <h3 className="mt-6 text-xl font-bold">{item.title}</h3>
               <p className="mt-2 text-gray-400">{item.description}</p>

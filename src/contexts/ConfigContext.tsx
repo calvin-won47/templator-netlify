@@ -27,6 +27,15 @@ export interface AppConfig {
     copyright?: string
     links?: { github?: string; twitter?: string; youtube?: string }
   }
+  features?: {
+    title?: string
+    subtitle?: string
+    items?: Array<{
+      icon?: string
+      title?: string
+      description?: string
+    }>
+  }
   apiEndpoints?: {
     cmsBaseUrl?: string
     cmsSiteId?: string
