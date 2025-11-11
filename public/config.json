@@ -1,44 +1,44 @@
 {
   "siteIdentity": {
-    "name": "默认站点名称",
+    "name": "NinetyThreeOne Vault",
     "logoUrl": "/default-logo.png"
   },
   "theming": {
-    "primaryColor": "#333333"
+    "primaryColor": "#E6AF2E"
   },
-  "slogan": "默认站点标语",
+  "slogan": "0931本地与稀有DVD收藏与租赁平台",
   "hero": {
-    "description": "这是默认的 Hero 描述。"
+    "description": "专注兰州及0931地区的电影、剧集、纪录片DVD；支持稀有与绝版盘交易，提供本地租赁服务。"
   },
   "seo": {
-    "title": "默认站点名称",
-    "description": "默认站点的 SEO 描述"
+    "title": "NinetyThreeOne Vault | 0931 DVD 电商与租赁平台",
+    "description": "0931dvd.com——面向兰州及0931地区的本地DVD电商与租赁服务，收藏电影、电视剧、纪录片与稀有绝版盘，服务本地居民、收藏者与游客。"
   },
-  "seoKeywords": "关键字1,关键字2",
+  "seoKeywords": "0931dvd, 兰州DVD, 绝版DVD, 稀有DVD, DVD租赁, NinetyThreeOne Vault, 本地电影, 区域纪录片",
   "gtmId": "GTM-58TDPTJ3",
   "features": {
-    "title": "Why Netlify",
-    "subtitle": "Netlify is the platform for modern web development that empowers teams to build better products faster.",
+    "title": "为什么选择 NinetyThreeOne Vault",
+    "subtitle": "0931地区本地化 DVD 电商平台，为收藏者而生。",
     "items": [
-      { "icon": "layers", "title": "Composable Web Architecture", "description": "Build performant, secure, and scalable websites and apps with a composable architecture." },
-      { "icon": "zap", "title": "High-Performance Edge", "description": "A programmable, high-performance edge network that is faster than other cloud providers." },
-      { "icon": "shield", "title": "Serverless Functions", "description": "Run on-demand serverless functions that automatically scale to meet your needs." },
-      { "icon": "code", "title": "Developer Workflow", "description": "A Git-based workflow for faster development, easier collaboration, and shorter time to market." },
-      { "icon": "globe", "title": "Enterprise-Grade Platform", "description": "A robust platform with the security, compliance, and performance that enterprises demand." },
-      { "icon": "puzzle", "title": "Integrations", "description": "Integrate your favorite tools and services to create a powerful, unified workflow." }
+      { "icon": "layers", "title": "本地化目录与精选", "description": "围绕0931地区文化整理精选电影、剧集与纪录片目录。" },
+      { "icon": "puzzle", "title": "稀有与绝版交易", "description": "促进收藏者间的稀有与绝版DVD交易，打造可信市场。" },
+      { "icon": "shield", "title": "正版与品相保障", "description": "严格的盘片检验与成色评级，确保交易安全与透明。" },
+      { "icon": "zap", "title": "快速本地履约", "description": "支持同城自提与加急配送，提升本地用户体验。" },
+      { "icon": "globe", "title": "外地邮寄与全国覆盖", "description": "为全国收藏者提供便捷邮寄服务，延展文化影响力。" },
+      { "icon": "code", "title": "会员与租赁管理", "description": "在线管理租赁周期、逾期提醒与会员权益。" }
     ]
   },
   "cta": {
-    "title": "免费开始",
-    "description": "使用我们的平台构建并部署你的下一个项目。",
-    "primaryLabel": "马上开始",
+    "title": "开始选购与租赁",
+    "description": "购买、交易与租赁本地与稀有DVD，发现真正值得收藏的实体媒体。",
+    "primaryLabel": "浏览库存",
     "primaryHref": "#",
-    "secondaryLabel": "申请演示",
+    "secondaryLabel": "提交租赁请求",
     "secondaryHref": "#",
     "emailPlaceholder": "name@example.com"
   },
   "footer": {
-    "tagline": "现代 Web 开发的平台。",
+    "tagline": "0931地区本地与稀有DVD电商与租赁平台。",
     "copyright": "All rights reserved.",
     "links": {
       "github": "#",

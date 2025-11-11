@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Menu, X, ChevronDown, Search } from 'lucide-react';
 import { useConfig } from '../contexts/ConfigContext';
+import { Link } from 'react-router-dom';
 
 const NetlifyLogo = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,21 +33,30 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
-            <a href="/" className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2">
               {logoUrl ? (
                 <img src={logoUrl} alt={siteName} className="w-6 h-6" />
               ) : (
                 <NetlifyLogo />
               )}
               <span className="font-bold text-lg">{siteName}</span>
-            </a>
+            </Link>
             <nav className="hidden lg:flex items-center space-x-6">
-              {navLinks.map((link) => (
-                <a key={link.name} href={link.href || '#'} className="flex items-center text-gray-300 hover:text-white text-sm">
-                  {link.name}
-                  {link.dropdown && <ChevronDown size={16} className="ml-1" />}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const href = link.href || '#';
+                const isInternal = href.startsWith('/');
+                return isInternal ? (
+                  <Link key={link.name} to={href} className="flex items-center text-gray-300 hover:text-white text-sm">
+                    {link.name}
+                    {link.dropdown && <ChevronDown size={16} className="ml-1" />}
+                  </Link>
+                ) : (
+                  <a key={link.name} href={href} className="flex items-center text-gray-300 hover:text-white text-sm">
+                    {link.name}
+                    {link.dropdown && <ChevronDown size={16} className="ml-1" />}
+                  </a>
+                );
+              })}
             </nav>
           </div>
 
@@ -70,12 +80,21 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="lg:hidden bg-[#040406] border-t border-gray-800">
           <nav className="flex flex-col px-4 py-4 space-y-4">
-            {navLinks.map((link) => (
-              <a key={link.name} href={link.href || '#'} className="flex justify-between items-center text-gray-300 hover:text-white">
-                {link.name}
-                {link.dropdown && <ChevronDown size={16} />}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const href = link.href || '#';
+              const isInternal = href.startsWith('/');
+              return isInternal ? (
+                <Link key={link.name} to={href} className="flex justify-between items-center text-gray-300 hover:text-white">
+                  {link.name}
+                  {link.dropdown && <ChevronDown size={16} />}
+                </Link>
+              ) : (
+                <a key={link.name} href={href} className="flex justify-between items-center text-gray-300 hover:text-white">
+                  {link.name}
+                  {link.dropdown && <ChevronDown size={16} />}
+                </a>
+              );
+            })}
             <div className="border-t border-gray-800 pt-4 flex flex-col space-y-4">
               <a href="#" className="text-gray-300 hover:text-white">Contact sales</a>
               <a href="#" className="text-gray-300 hover:text-white">Log in</a>
