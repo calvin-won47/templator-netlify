@@ -13,6 +13,8 @@ on:
         description: "可选：只部署到某一个站点的绝对路径 (例如 /www/wwwroot/example.com)"
         required: false
         type: string
+  schedule:
+    - cron: '0 2 * * *' # 每日 02:00 UTC 定时刷新站点地图并部署
 
 jobs:
   # --- 作业 1: 构建 React/Vite 应用 ---
@@ -50,18 +52,21 @@ jobs:
     name: 2. Deploy to Baota Server
     needs: build # 确保此作业在 'build' 作业成功后才运行
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-${{ matrix.site.url }}
+      cancel-in-progress: true
 
     # --- 关键：使用 Matrix 策略批量部署 ---
     # 在这里手动维护您所有站点的“服务器绝对路径”
     strategy:
       matrix:
-        site_path:
-          # 运行 'create_site.py' 后，您需要来这里添加新站点的路径
-          - /www/wwwroot/0931dvd.com
-          - /www/wwwroot/savoiaesavoia.com
-          - /www/wwwroot/vildhjarta.com
-          - /www/wwwroot/cocedein.com
-          - /www/wwwroot/kpokertour.com
+        site:
+          # 运行 'create_site.py' 后，您需要来这里添加新站点的 { path, url }
+          - { path: "/www/wwwroot/0931dvd.com", url: "https://0931dvd.com" }
+          - { path: "/www/wwwroot/savoiaesavoia.com", url: "https://savoiaesavoia.com" }
+          - { path: "/www/wwwroot/vildhjarta.com", url: "https://vildhjarta.com" }
+          - { path: "/www/wwwroot/cocedein.com", url: "https://cocedein.com" }
+          - { path: "/www/wwwroot/kpokertour.com", url: "https://kpokertour.com" }
 
           # - /www/wwwroot/client-c.com
           #... 您可以在这里列出100个
@@ -77,6 +82,46 @@ jobs:
           name: vite-build-dist
           path: ./dist
 
+      - name: Setup Node.js 18 (for sitemap generation)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install jq for JSON parsing
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Read remote config.json and export env
+        run: |
+          set -e
+          echo "SITE_URL=${{ matrix.site.url }}" >> $GITHUB_ENV
+          # 尝试读取远程站点 config.json（如果存在）
+          if curl -fsSL "${{ matrix.site.url }}/config.json" -o /tmp/remote_config.json; then
+            echo "远程 config.json 已获取，解析 apiEndpoints..."
+            CMS_BASE_URL=$(jq -r '.apiEndpoints.cmsBaseUrl // empty' /tmp/remote_config.json)
+            CMS_SITE_ID=$(jq -r '.apiEndpoints.cmsSiteId // empty' /tmp/remote_config.json)
+            if [ -n "$CMS_BASE_URL" ]; then echo "cmsBaseUrl=$CMS_BASE_URL" >> $GITHUB_ENV; fi
+            if [ -n "$CMS_SITE_ID" ]; then echo "cmsSiteId=$CMS_SITE_ID" >> $GITHUB_ENV; fi
+          else
+            echo "远程 config.json 不存在或不可访问，将回退到仓库 public/config.json"
+          fi
+          # 若远程未提供某项，则回退到仓库的 public/config.json
+          CMS_BASE_URL_CUR=${CMS_BASE_URL:-}
+          CMS_SITE_ID_CUR=${CMS_SITE_ID:-}
+          if [ -z "$CMS_BASE_URL_CUR" ] || [ -z "$CMS_SITE_ID_CUR" ]; then
+            CMS_BASE_URL_LOCAL=$(jq -r '.apiEndpoints.cmsBaseUrl // empty' public/config.json)
+            CMS_SITE_ID_LOCAL=$(jq -r '.apiEndpoints.cmsSiteId // empty' public/config.json)
+            if [ -z "$CMS_BASE_URL_CUR" ] && [ -n "$CMS_BASE_URL_LOCAL" ]; then echo "cmsBaseUrl=$CMS_BASE_URL_LOCAL" >> $GITHUB_ENV; fi
+            if [ -z "$CMS_SITE_ID_CUR" ] && [ -n "$CMS_SITE_ID_LOCAL" ]; then echo "cmsSiteId=$CMS_SITE_ID_LOCAL" >> $GITHUB_ENV; fi
+          fi
+
+      - name: Generate sitemap.xml and robots.txt
+        env:
+          STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
+        run: |
+          node scripts/generate-sitemap.mjs
+
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -87,7 +132,7 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.BAOTA_SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to ${{ matrix.site_path }} via rsync
+      - name: Deploy to ${{ matrix.site.path }} via rsync
         run: |
           rsync -rlDz \
             --delete \
@@ -97,11 +142,11 @@ jobs:
             --exclude='.well-known/' \
             --exclude='logs/' \
             --exclude='ssl/' \
-            ./dist/ ${{ secrets.BAOTA_SSH_USER }}@${{ secrets.BAOTA_SERVER_IP }}:${{ matrix.site_path }}
+            ./dist/ ${{ secrets.BAOTA_SSH_USER }}@${{ secrets.BAOTA_SERVER_IP }}:${{ matrix.site.path }}
 
       - name: Seed config.json if missing (first-time only)
         run: |
-          rsync -avzr --ignore-existing ./public/config.json ${{ secrets.BAOTA_SSH_USER }}@${{ secrets.BAOTA_SERVER_IP }}:${{ matrix.site_path }}/
+          rsync -avzr --ignore-existing ./public/config.json ${{ secrets.BAOTA_SSH_USER }}@${{ secrets.BAOTA_SERVER_IP }}:${{ matrix.site.path }}/
 
   # --- 作业 3: 仅部署到一个指定站点（手动触发用） ---
   deploy_single:
